@@ -1,0 +1,41 @@
+##IAR Ninja build file
+
+
+#Rules
+rule COMPILER_XCL
+  command = "C$:\Program$ Files\IAR$ Systems\Embedded$ Workbench$ 9.1\common\bin\XclFileGenerator.exe" $xclcommand -f "$rspfile_name"
+  description = IAR_NEW_TOOL+++COMPILER_XCL+++$in
+  rspfile = $rspfile_name
+  rspfile_content = $flags
+
+rule INDEXER
+  command = "C$:\Program$ Files\IAR$ Systems\Embedded$ Workbench$ 9.1\common\bin\SourceIndexer.exe" $flags
+  depfile = $out.dep
+  description = IAR_NEW_TOOL+++INDEXER+++$out
+
+rule MAKEBROWSE
+  command = "C$:\Program$ Files\IAR$ Systems\Embedded$ Workbench$ 9.1\common\bin\makeBrowseData.exe" $flags
+  description = IAR_NEW_TOOL+++MAKEBROWSE+++$out
+
+rule PDBLINK
+  command = "C$:\Program$ Files\IAR$ Systems\Embedded$ Workbench$ 9.1\common\bin\PbdLink.exe" $flags
+  description = IAR_NEW_TOOL+++PDBLINK+++$out
+
+
+
+#Build steps
+build C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\main.xcl : COMPILER_XCL 
+  xclcommand = -source_file C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\main.c -xcl_file C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\main.xcl -macro_file C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\main.tmp -icc_path "C$:\Program$ Files\IAR$ Systems\Embedded$ Workbench$ 9.1\430\bin\icc430.exe" -u8_wrapper "C$:\Program$ Files\IAR$ Systems\Embedded$ Workbench$ 9.1\common\bin\iarconvert.exe"
+  flags = C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\main.c -o C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\Debug\Obj\ --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --debug -D__MSP430F169__ -e --double=32 --dlib_config "C$:\Program$ Files\IAR$ Systems\Embedded$ Workbench$ 9.1\430\lib\dlib\dl430fn.h" -Ol --multiplier=16 --predef_macros C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\main.tmp
+  rspfile_name = C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\main.xcl.rsp
+
+build C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\main.pbi : INDEXER C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\main.xcl |  $
+C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\main.c
+  flags = -out=C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\main.pbi -f C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\main.xcl
+
+build C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\prjt_20230525.pbw : MAKEBROWSE C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\prjt_20230525.pbd
+  flags = C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\prjt_20230525.pbd -output C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\prjt_20230525.pbw
+
+build C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\prjt_20230525.pbd : PDBLINK C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\main.pbi
+  flags = -M C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\prjt_20230525.pbd C$:\Users\czw10_12.LABTUC5\Documents\Prj_20230525\BrowseInfo\main.pbi
+
